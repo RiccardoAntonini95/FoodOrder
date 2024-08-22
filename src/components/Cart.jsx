@@ -1,4 +1,5 @@
 import { useContext } from "react"
+import CartItem from "./CartItem.jsx"
 import Button from "./UI/Button.jsx"
 import Modal from "./UI/Modal.jsx"
 import CartContext from "../store/CartContext.jsx"
@@ -19,13 +20,13 @@ export default function Cart(){
             <h2>Your cart</h2>
             <ul>
                 {cartCtx.items.map((item) => (
-                    <li key={item.id}>{item.name} - {item.quantity}</li>
+                    <CartItem key={item.id} name={item.name} quantity={item.quantity} price={item.price} onIncrease={() => cartCtx.addItem(item)} onDecrease={() => cartCtx.removeItem(item.id)} />
                 ))}
             </ul>
             <p className="cart-total">{currencyFormatter.format(cartTotal)}</p>
             <p className="modal-actions">
                 <Button textOnly onClick={handleCloseCart}>Close</Button>
-                <Button>Go to checkout</Button>
+                <Button onClick={handleCloseCart}>Go to checkout</Button>
             </p>
         </Modal>
     )
