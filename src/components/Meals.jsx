@@ -14,7 +14,6 @@ export default function Meals(){
                     throw new Error("Network response was not ok")
                 }
                 const meals = await response.json()
-                console.log(meals , "dati arrivati")
                 setIsLoading(false) 
                 setMealsData(meals)
                 
