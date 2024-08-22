@@ -4,6 +4,7 @@ export const CartContext = createContext({
   items: [],
   addItem: (item) => {},
   removeItem: (id) => {},
+  clearCart: () => {},
 });
 
 function cartReducer(state, action) {
@@ -45,32 +46,45 @@ function cartReducer(state, action) {
         ...existingCartItem,
         quantity: existingCartItem.quantity - 1,
       };
-      updatedItems[existingCartItemIndex] = updatedItem
+      updatedItems[existingCartItemIndex] = updatedItem;
     }
-    return {...state, items: updatedItems}
+    return { ...state, items: updatedItems };
+  }
+
+  if (action.type === "CLEAR_CART") {
+    return { ...state, items: [] }; //reset
   }
 
   return state;
 }
 
 export function CartContextProvider({ children }) {
-  const [cartState, dispatchCartAction ] = useReducer(cartReducer, { items: [] });
-  
-  function addItem(item){
-      dispatchCartAction({type: 'ADD_ITEM', item}) //scrivendo solo item qui ho scritto item: item
-    }
-    
-    function removeItem(id){
-        dispatchCartAction({type: 'REMOVE_ITEM', id}) //javascript shortcut id: id
-    }
-    
-    const cartContext = {
-      items: cartState.items,
-      addItem, //addItem: addItem
-      removeItem //same
-    }
+  const [cartState, dispatchCartAction] = useReducer(cartReducer, {
+    items: [],
+  });
 
-  return <CartContext.Provider value={cartContext}>{children}</CartContext.Provider>;
+  function addItem(item) {
+    dispatchCartAction({ type: "ADD_ITEM", item }); //scrivendo solo item qui ho scritto item: item
+  }
+
+  function removeItem(id) {
+    dispatchCartAction({ type: "REMOVE_ITEM", id }); //javascript shortcut id: id
+  }
+
+  function clearCart() {
+    dispatchCartAction({ type: "CLEAR_CART" });
+  }
+
+  const cartContext = {
+    items: cartState.items,
+    addItem, //addItem: addItem
+    removeItem, //same
+    clearCart,
+  };
+
+  return (
+    <CartContext.Provider value={cartContext}>{children}</CartContext.Provider>
+  );
 }
 
 export default CartContext;

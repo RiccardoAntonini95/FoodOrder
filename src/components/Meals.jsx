@@ -1,4 +1,4 @@
-/* import { useEffect, useState } from "react" */
+import Error from "./Error.jsx";
 import MealItem from "./MealItem";
 import useHttp from "../hooks/useHttp.js";
 
@@ -13,7 +13,11 @@ export default function Meals() {
   } = useHttp("http://localhost:3000/meals", requestConfig, []); //config come secondo parametro non necessario in quanto richiesta GET
 
   if(isLoading){
-    return <p>Fetching meals..</p>
+    return <p className="center">Fetching meals..</p>
+  }
+
+  if(error){
+    return <Error title="Failed to fetch meals" message={error} /> //nel custom hook se c'è un errore è settato sullo state error
   }
 
   return (

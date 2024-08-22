@@ -18,11 +18,17 @@ export default function useHttp(url, config, initialData){
     const [error, setError] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [data, setData] = useState(initialData)
+
+    function clearData(){
+        console.log("sono clear data")
+        setData(initialData)
+        console.log(initialData)
+    }
     
-    const sendRequest = useCallback(async function sendRequest(){
+    const sendRequest = useCallback(async function sendRequest(data){ // per il checkout component mi serve passare il body della request 
         setIsLoading(true)
         try {
-            const resData = await sendHttpRequest(url, config)
+            const resData = await sendHttpRequest(url, {...config, body: data})
             setData(resData)
         } catch (error) {
             setError(error.message || "Something went wrong")
@@ -43,6 +49,7 @@ export default function useHttp(url, config, initialData){
         data,
         isLoading,
         error,
-        sendRequest //esponendola posso far si che i component che usano questo hook possano chiamarla quando necessario, ad esempio al submit del form checkout
+        sendRequest, //esponendola posso far si che i component che usano questo hook possano chiamarla quando necessario, ad esempio al submit del form checkout
+        clearData
     }
 }
