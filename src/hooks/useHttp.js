@@ -14,15 +14,15 @@ async function sendHttpRequest(url, config){
     return resData
 }
 
-export default function useHttp(url, config){
-    const [error, setError] = useState()
+export default function useHttp(url, config, initialData){
+    const [error, setError] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [data, setData] = useState(false)
+    const [data, setData] = useState(initialData)
     
     const sendRequest = useCallback(async function sendRequest(){
         setIsLoading(true)
         try {
-            const resData = sendHttpRequest(url, config)
+            const resData = await sendHttpRequest(url, config)
             setData(resData)
         } catch (error) {
             setError(error.message || "Something went wrong")
@@ -33,7 +33,7 @@ export default function useHttp(url, config){
     //invoco la funzione ma aggiungendola all'array di dipendenze dato che viene definita fuori, dovrò anche usare useCallback per evitare loop infiniti
     //perchè aggiornando gli state rieseguo useHttp e creo un nuovo oggetto sendRequest 
     useEffect(() => {
-        if(config && config.method === "GET"){
+        if(!config || (config.method === "GET" || !config.method)){
             sendRequest();
         }
     }, [sendRequest, config])
