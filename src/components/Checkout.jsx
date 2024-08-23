@@ -72,7 +72,7 @@ export default function Checkout() {
     actions = <span>Sending order data...</span>
   }
 
-  if(data && !error){
+  if(data.length !== 0 && !error){
     return <Modal open={userProgressCtx.progress === "checkout"} onClose={handleCloseCheckout}>
         <h2>Success!</h2>
         <p>Your order was submitted successfully.</p>

@@ -20,9 +20,7 @@ export default function useHttp(url, config, initialData){
     const [data, setData] = useState(initialData)
 
     function clearData(){
-        console.log("sono clear data")
         setData(initialData)
-        console.log(initialData)
     }
     
     const sendRequest = useCallback(async function sendRequest(data){ // per il checkout component mi serve passare il body della request 
